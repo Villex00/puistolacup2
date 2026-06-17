@@ -1,26 +1,15 @@
-export const DEFAULT_TEAMS = [
-  { id: "team_1", name: "Puistola U12", group: "A" },
-  { id: "team_2", name: "HJK Sininen", group: "A" },
-  { id: "team_3", name: "Malmi PS", group: "A" },
-  { id: "team_4", name: "Honka Akatemia", group: "A" },
-  { id: "team_5", name: "GrIFK Green", group: "B" },
-  { id: "team_6", name: "VJS Vantaa", group: "B" },
-  { id: "team_7", name: "Gnistan Kelt.", group: "B" },
-  { id: "team_8", name: "PK-35 Punainen", group: "B" }
-];
+export const DEFAULT_TEAMS: Array<{ id: string; name: string; group?: string }> = [];
 
-export const DEFAULT_MATCHES = [
-  { id: "match_1", home: "team_1", away: "team_2", hg: 2, ag: 1, time: "11:00", field: 1, live: false },
-  { id: "match_2", home: "team_3", away: "team_4", hg: 0, ag: 3, time: "11:00", field: 2, live: false },
-  { id: "match_3", home: "team_5", away: "team_6", hg: 1, ag: 2, time: "11:30", field: 1, live: false },
-  { id: "match_4", home: "team_7", away: "team_8", hg: 1, ag: 1, time: "11:30", field: 2, live: false },
-  { id: "match_5", home: "team_1", away: "team_3", hg: 3, ag: 0, time: "12:00", field: 1, live: false },
-  { id: "match_6", home: "team_2", away: "team_4", hg: 1, ag: 3, time: "12:00", field: 2, live: false },
-  { id: "match_7", home: "team_5", away: "team_7", hg: 2, ag: 0, time: "12:30", field: 1, live: false },
-  { id: "match_8", home: "team_6", away: "team_8", hg: 0, ag: 2, time: "12:30", field: 2, live: false },
-  { id: "match_9", home: "team_1", away: "team_4", hg: 2, ag: 1, time: "14:30", field: 1, live: true },
-  { id: "match_10", home: "team_2", away: "team_3", hg: 1, ag: 1, time: "14:30", field: 2, live: true }
-];
+export const DEFAULT_MATCHES: Array<{
+  id: string;
+  home: string;
+  away: string;
+  hg: number | null | string;
+  ag: number | null | string;
+  time: string;
+  field: number | string;
+  live: boolean;
+}> = [];
 
 export const DEFAULT_PLAYOFFS = [
   { id: "qf_1", round: "qf", home: "team_1", away: "team_8", hg: 3, ag: 1, live: false, time: "16:30", field: 1 },

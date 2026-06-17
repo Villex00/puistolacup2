@@ -620,7 +620,6 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
                   <option value="A">Lohko A</option>
                   <option value="B">Lohko B</option>
                   <option value="C">Lohko C</option>
-                  <option value="D">Lohko D</option>
                 </select>
               </div>
 
@@ -660,7 +659,6 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
                           <option value="A">Lohko A</option>
                           <option value="B">Lohko B</option>
                           <option value="C">Lohko C</option>
-                          <option value="D">Lohko D</option>
                         </select>
                       </div>
                     </div>

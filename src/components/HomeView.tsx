@@ -98,7 +98,7 @@ export default function HomeView({ teams, matches, sponsors, sponsorsIntro, setA
           }`}>
             <div className="flex justify-between items-center mb-2 md:mb-4">
               <span className="font-mono text-[9px] md:text-2xs font-bold text-[#8b949e] uppercase tracking-wider block">
-                KENTTÄ 1 (NURMI)
+                KENTTÄ 1 
               </span>
               {liveCard1 ? (
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#00c97a]/20 border border-[#00c97a]/30 animate-pulse">
@@ -166,7 +166,7 @@ export default function HomeView({ teams, matches, sponsors, sponsorsIntro, setA
           }`}>
             <div className="flex justify-between items-center mb-2 md:mb-4">
               <span className="font-mono text-[9px] md:text-2xs font-bold text-[#8b949e] uppercase tracking-wider block">
-                KENTTÄ 2 (HIEKKA)
+                KENTTÄ 2 
               </span>
               {liveCard2 ? (
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#00c97a]/20 border border-[#00c97a]/30 animate-pulse">

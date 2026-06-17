@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Team, Match, PlayoffMatch, Sponsor, Settings } from '../types';
 import { rtdb } from '../firebase';
-import { ref, set, push, remove, update } from 'firebase/database';
+import { ref, set, push, remove, update, get } from 'firebase/database';
 import { 
   DEFAULT_TEAMS, 
   DEFAULT_MATCHES, 
@@ -35,7 +35,7 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
   // Form States
   // 1. Team states
   const [newTeamName, setNewTeamName] = useState('');
-  const [newTeamGroup, setNewTeamGroup] = useState('A');
+  const [newTeamGroup, setNewTeamGroup] = useState('');
 
   // 2. Match states
   const [newMatchHome, setNewMatchHome] = useState('');
@@ -78,22 +78,72 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
 
     const teamsRef = ref(rtdb, 'puistolacup/teams');
     const newTeamRef = push(teamsRef);
-    set(newTeamRef, {
-      name: newTeamName.trim(),
-      group: newTeamGroup
-    }).then(() => {
+    const teamPayload: any = { name: newTeamName.trim() };
+    if (newTeamGroup !== '') teamPayload.group = newTeamGroup;
+
+    set(newTeamRef, teamPayload).then(() => {
       setNewTeamName('');
+      setNewTeamGroup('');
     });
   };
 
-  const handleDeleteTeam = (id: string) => {
+  const handleDeleteTeam = async (id: string) => {
     if (window.confirm('Haluatko varmasti poistaa tämän joukkueen?')) {
-      const teamRef = ref(rtdb, `puistolacup/teams/${id}`);
-      remove(teamRef);
+      try {
+        const teamRef = ref(rtdb, `puistolacup/teams/${id}`);
+        await remove(teamRef);
+
+        // Clear references to this team in matches (set home/away to empty)
+        const matchesRef = ref(rtdb, 'puistolacup/matches');
+        const snap = await get(matchesRef);
+        const val = snap.val();
+        if (val) {
+          Object.entries(val).forEach(([mId, item]: [string, any]) => {
+            if (item.home === id || item.away === id) {
+              const mRef = ref(rtdb, `puistolacup/matches/${mId}`);
+              const updates: any = {};
+              if (item.home === id) updates.home = '';
+              if (item.away === id) updates.away = '';
+              update(mRef, updates);
+            }
+          });
+        }
+
+        // Optionally, clear references in playoffs as well
+        const playoffsRef = ref(rtdb, 'puistolacup/playoffs');
+        const pSnap = await get(playoffsRef);
+        const pVal = pSnap.val();
+        if (pVal) {
+          Object.entries(pVal).forEach(([pId, pItem]: [string, any]) => {
+            const pUpdates: any = {};
+            let shouldUpdate = false;
+            if (pItem.home === id) { pUpdates.home = ''; shouldUpdate = true; }
+            if (pItem.away === id) { pUpdates.away = ''; shouldUpdate = true; }
+            if (shouldUpdate) {
+              const pRef = ref(rtdb, `puistolacup/playoffs/${pId}`);
+              update(pRef, pUpdates);
+            }
+          });
+        }
+
+        alert('Joukkue ja viittaukset poistettu onnistuneesti.');
+      } catch (err) {
+        console.error('Poisto epäonnistui:', err);
+        alert('Joukkueen poisto epäonnistui. Tarkista konsoli.');
+      }
     }
   };
 
   // 2. MATCHES LOGIC
+
+  const handleUpdateTeamGroup = (id: string, group: string) => {
+    const teamRef = ref(rtdb, `puistolacup/teams/${id}`);
+    update(teamRef, { group: group }).catch((err) => {
+      console.error('Lohkon päivitys epäonnistui', err);
+      alert('Lohkon päivitys epäonnistui. Katso konsoli.');
+    });
+  };
+
   const handleAddMatch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMatchHome || !newMatchAway || newMatchHome === newMatchAway) {
@@ -560,6 +610,7 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
                   onChange={(e) => setNewTeamGroup(e.target.value)}
                   className="w-full bg-[#0d1117] border border-[#30363d] focus:border-[#00c97a] text-xs font-sans rounded-lg p-2.5 text-white"
                 >
+                  <option value="">Ei lohkoa</option>
                   <option value="A">Lohko A</option>
                   <option value="B">Lohko B</option>
                   <option value="C">Lohko C</option>
@@ -592,9 +643,20 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
                   >
                     <div>
                       <p className="font-sans font-extrabold text-white text-sm">{t.name}</p>
-                      <span className="font-mono text-3xs text-[#8b949e] uppercase">
-                        Sijoitus: Lohko {t.group}
-                      </span>
+                      <div className="mt-1 flex items-center gap-2">
+                        <label className="text-3xs font-mono text-[#8b949e] uppercase">Lohko</label>
+                        <select
+                          value={t.group || ''}
+                          onChange={(e) => handleUpdateTeamGroup(t.id, e.target.value)}
+                          className="bg-[#0d1117] border border-[#30363d] text-2xs rounded p-1 text-white"
+                        >
+                          <option value="">Ei lohkoa</option>
+                          <option value="A">Lohko A</option>
+                          <option value="B">Lohko B</option>
+                          <option value="C">Lohko C</option>
+                          <option value="D">Lohko D</option>
+                        </select>
+                      </div>
                     </div>
 
                     <button

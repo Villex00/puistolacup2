@@ -17,7 +17,7 @@ export default function Footer({ footerText, activeTab, setActiveTab }: FooterPr
             PuistolaCup 2026
           </span>
           <p className="text-xs text-[#8b949e]">
-            {footerText || '© 2026 PuistolaCup. Athletic, Precise, Urgent.'}
+            {footerText || '© 2026 PuistolaCup. Kotkan Tapahtumat Ry.'}
           </p>
         </div>
 

@@ -167,10 +167,16 @@ export default function AdminView({ teams, matches, playoffs, sponsors, settings
     });
   };
 
-  const handleDeleteMatch = (id: string) => {
+  const handleDeleteMatch = async (id: string) => {
     if (window.confirm('Poistetaanko tämä ottelu kokonaan kalenterista?')) {
-      const matchRef = ref(rtdb, `puistolacup/matches/${id}`);
-      remove(matchRef);
+      try {
+        const matchRef = ref(rtdb, `puistolacup/matches/${id}`);
+        await remove(matchRef);
+        alert('Ottelu poistettu onnistuneesti.');
+      } catch (err) {
+        console.error('Ottelun poisto epäonnistui:', err);
+        alert('Ottelun poisto epäonnistui. Tarkista konsoli.');
+      }
     }
   };
 

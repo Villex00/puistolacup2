@@ -292,7 +292,7 @@ export default function HomeView({ teams, matches, sponsors, sponsorsIntro, setA
           <div className="p-4 rounded-xl bg-[#161b22] border border-[#30363d] space-y-3">
             <h3 className="font-sans font-extrabold text-sm text-[#00c97a] flex items-center justify-between border-b border-[#30363d] pb-2">
               <span>Lohkojako</span>
-              <span className="font-mono text-2xs font-normal text-[#8b949e]">8 JOUKKUETTA</span>
+              <span className="font-mono text-2xs font-normal text-[#8b949e]">14 JOUKKUETTA</span>
             </h3>
             <div className="space-y-4 pt-1">
               <div>

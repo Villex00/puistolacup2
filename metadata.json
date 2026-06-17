@@ -1,0 +1,6 @@
+{
+  "name": "PuistolaCup",
+  "description": "Reaaliaikainen 7v7 höntsäfutiksen turnaustulossivusto PuistolaCup 2026.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
